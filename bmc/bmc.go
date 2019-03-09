@@ -3,7 +3,7 @@ package bmc
 import (
 	"net"
 	"log"
-	"github.com/rmxymh/infra-ecosphere/vm"
+	"infra-ecosphere/vm"
 )
 
 type BMC struct {

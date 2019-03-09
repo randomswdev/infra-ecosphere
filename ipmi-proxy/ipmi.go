@@ -11,10 +11,10 @@ import (
 )
 
 import (
-	"github.com/rmxymh/infra-ecosphere/utils"
-	"github.com/rmxymh/infra-ecosphere/ipmi"
-	"github.com/rmxymh/infra-ecosphere/web"
-	"github.com/rmxymh/infra-ecosphere/bmc"
+	"infra-ecosphere/utils"
+	"infra-ecosphere/ipmi"
+	"infra-ecosphere/web"
+	"infra-ecosphere/bmc"
 )
 
 var EcosphereIP string = "10.0.2.2"

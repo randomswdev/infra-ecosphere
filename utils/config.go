@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"log"
 	"net"
-	"github.com/rmxymh/infra-ecosphere/vm"
-	"github.com/rmxymh/infra-ecosphere/bmc"
-	"github.com/rmxymh/infra-ecosphere/web"
+	"infra-ecosphere/vm"
+	"infra-ecosphere/bmc"
+	"infra-ecosphere/web"
 )
 
 type ConfigNode struct {

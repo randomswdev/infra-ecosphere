@@ -6,12 +6,12 @@ import (
 )
 
 import (
-	"github.com/rmxymh/infra-ecosphere/bmc"
+	"infra-ecosphere/bmc"
 	"github.com/gorilla/mux"
 	"strings"
 	"fmt"
 	"net"
-	"github.com/rmxymh/infra-ecosphere/vm"
+	"infra-ecosphere/vm"
 )
 
 type WebRespBMC struct {

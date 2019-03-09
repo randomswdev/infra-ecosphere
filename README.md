@@ -36,20 +36,17 @@ Then:
 
 ```sh
 $ cd ${GOPATH}/src
-$ go get github.com/rmxymh/infra-ecosphere
+$ git clone <infra-ecosphere>
 $ cd infra-ecoshphere
 ```
 
 * Prepare for dependencies
 
 ```sh
-$ go get github.com/rmxymh/go-virtualbox
-$ go get github.com/htruong/go-md2
-$ go get github.com/gorilla/mux
-$ go get github.com/jmcvetta/napping
+$ dep ensure
 ```
 
-* Build: infra-ecosphere main package is located at ${GOPATH}/src/github.com/rmxymh/infra-ecosphere/infra-ecosphere 
+* Build: infra-ecosphere main package is located at ${GOPATH}/src/infra-ecosphere 
 
 ```sh
 $ go install
@@ -150,7 +147,7 @@ Besides, you can operate VM via REST APIs, and currently this project supports t
 * Send power operation to the BMC: PUT /api/BMCs/<BMC_IP>/power
 * Set boot device to the BMC: PUT /api/BMCs/<BMC_IP>/bootdev
 
-For more detailed information, you can find it from [Web README.md](https://github.com/rmxymh/infra-ecosphere/blob/master/web/README.md)
+For more detailed information, you can find it from [Web README.md](https://infra-ecosphere/blob/master/web/README.md)
 
 ## Note
 
@@ -171,7 +168,7 @@ More detail information can be found at func init() in ipmi_app.go, ipmi_chassis
 
 IPMI Proxy is a utility as a proxy which help us to pass the IPMI command out and response the result to the sender. 
 
-For more detailed information, you can obtain from this link: [IPMI Proxy README.md](https://github.com/rmxymh/infra-ecosphere/blob/master/ipmi-proxy/README.md) 
+For more detailed information, you can obtain from this link: [IPMI Proxy README.md](https://infra-ecosphere/blob/master/ipmi-proxy/README.md) 
 
 
 ## TODO

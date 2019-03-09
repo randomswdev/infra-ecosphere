@@ -5,9 +5,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"log"
-	"github.com/rmxymh/infra-ecosphere/bmc"
-	"github.com/rmxymh/infra-ecosphere/utils"
-	"github.com/rmxymh/infra-ecosphere/vm"
+	"infra-ecosphere/bmc"
+	"infra-ecosphere/utils"
+	"infra-ecosphere/vm"
 )
 
 const (

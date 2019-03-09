@@ -12,7 +12,7 @@ import (
 
 import (
 	"github.com/htruong/go-md2"
-	"github.com/rmxymh/infra-ecosphere/bmc"
+	"infra-ecosphere/bmc"
 )
 
 // port from OpenIPMI

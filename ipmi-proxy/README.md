@@ -12,7 +12,7 @@ To solve this issue, IPMI proxy runs on that VM, and it listens on the IP and IP
 
 ## Build
 
-* Build: infra-ecosphere main package is located at ${GOPATH}/src/github.com/rmxymh/infra-ecosphere/infra-ecosphere 
+* Build: infra-ecosphere main package is located at ${GOPATH}/src/infra-ecosphere/infra-ecosphere 
 
 ```sh
 $ cd ipmi-proxy
@@ -22,7 +22,7 @@ $ go install
 
 ## Usage
 
-Before you run ipmi-proxy, please copy the config file which is used by infra-ecosphere to this VM. For more detailed configuration syntax, you can find from [here](https://github.com/rmxymh/infra-ecosphere/blob/master/README.md#config-file)
+Before you run ipmi-proxy, please copy the config file which is used by infra-ecosphere to this VM. For more detailed configuration syntax, you can find from [here](https://infra-ecosphere/blob/master/README.md#config-file)
 
 After you have prepared for the configuration file in the same path as your executable file, just execute the executable file:
 

@@ -14,8 +14,8 @@ import (
 
 
 import (
-	"github.com/rmxymh/infra-ecosphere/bmc"
-	"github.com/rmxymh/infra-ecosphere/utils"
+	"infra-ecosphere/bmc"
+	"infra-ecosphere/utils"
 )
 
 var running bool = false
