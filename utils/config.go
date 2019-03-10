@@ -1,18 +1,19 @@
 package utils
 
 import (
-	"os"
 	"encoding/json"
+	"infra-ecosphere/bmc"
+	"infra-ecosphere/vm"
+	"infra-ecosphere/web"
 	"log"
 	"net"
-	"infra-ecosphere/vm"
-	"infra-ecosphere/bmc"
-	"infra-ecosphere/web"
+	"os"
 )
 
 type ConfigNode struct {
-	BMCIP string
+	BMCIP  string
 	VMName string
+	VMType vm.InstanceType
 }
 
 type ConfigBMCUser struct {
@@ -21,9 +22,9 @@ type ConfigBMCUser struct {
 }
 
 type Configuration struct {
-	Nodes		[]ConfigNode
-	BMCUsers	[]ConfigBMCUser
-	WebAPIPort	int
+	Nodes      []ConfigNode
+	BMCUsers   []ConfigBMCUser
+	WebAPIPort int
 }
 
 func LoadConfig(configFile string) Configuration {
@@ -44,11 +45,7 @@ func LoadConfig(configFile string) Configuration {
 
 	// initialize BMCs and Instances
 	for _, node := range configuration.Nodes {
-		fakeNode := false
-		if len(node.VMName) == 0 {
-			fakeNode = true
-		}
-		instance := vm.AddInstnace(node.VMName, fakeNode)
+		instance := vm.AddInstnace(node.VMName, node.VMType)
 		bmc.AddBMC(net.ParseIP(node.BMCIP), instance)
 	}
 

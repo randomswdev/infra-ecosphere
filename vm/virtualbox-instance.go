@@ -2,62 +2,26 @@ package vm
 
 import (
 	"log"
+
 	vbox "github.com/rmxymh/go-virtualbox"
 )
 
-const (
-	BOOT_DEVICE_PXE =	"net"
-	BOOT_DEVICE_DISK =	"disk"
-	BOOT_DEVICE_CD_DVD =	"dvd"
-	BOOT_DEVICE_FLOPPY =	"floppy"
-)
-
-type Instance struct {
+type VirtualBoxInstance struct {
 	Name string
-	FakeNode		bool
 
-	defaultBootOrder	[]string
-	nextBootOrder		[]string
-	changeBootOrder		bool
+	defaultBootOrder []string
+	nextBootOrder    []string
+	changeBootOrder  bool
 }
 
-var instances map[string]Instance
-
-func init() {
-	instances = make(map[string]Instance)
-}
-
-func AddInstnace(name string, fakeNode bool) Instance {
-	newInstance := Instance {
-		Name: name,
-		FakeNode: fakeNode,
-		defaultBootOrder: []string {"disk", "net"},
+func NewVirtualBoxInstance(name string) *VirtualBoxInstance {
+	return &VirtualBoxInstance{
+		Name:             name,
+		defaultBootOrder: []string{"disk", "net"},
 	}
-	instances[name] = newInstance
-	newInstance.NICInitialize()
-	log.Println("Add instance ", name)
-
-	return newInstance
 }
 
-func DeleteInstance(name string) {
-	_, ok := instances[name]
-	if ok {
-		delete(instances, name)
-	}
-	log.Println("Remove instance ", name)
-}
-
-func GetInstance(name string) (instance Instance, ok bool) {
-	instance, ok = instances[name]
-	return instance, ok
-}
-
-func (instance *Instance)IsRunning() bool {
-	if instance.FakeNode {
-		return true
-	}
-
+func (instance *VirtualBoxInstance) IsRunning() bool {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err == nil && machine.State == vbox.Running {
@@ -66,11 +30,7 @@ func (instance *Instance)IsRunning() bool {
 	return false
 }
 
-func (instance *Instance)SetBootDevice(dev string) {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) SetBootDevice(dev string) {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {
@@ -89,11 +49,7 @@ func (instance *Instance)SetBootDevice(dev string) {
 	instance.changeBootOrder = true
 }
 
-func (instance *Instance)PowerOff() {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) PowerOff() {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {
@@ -104,11 +60,7 @@ func (instance *Instance)PowerOff() {
 	machine.Poweroff()
 }
 
-func (instance *Instance)ACPIOff() {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) ACPIOff() {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {
@@ -119,11 +71,7 @@ func (instance *Instance)ACPIOff() {
 	machine.Stop()
 }
 
-func (instance *Instance)PowerOn() {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) PowerOn() {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {
@@ -147,11 +95,7 @@ func (instance *Instance)PowerOn() {
 	machine.Start()
 }
 
-func (instance *Instance)Reset() {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) Reset() {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {
@@ -162,11 +106,7 @@ func (instance *Instance)Reset() {
 	machine.Reset()
 }
 
-func (instance *Instance)NICInitialize() {
-	if instance.FakeNode {
-		return
-	}
-
+func (instance *VirtualBoxInstance) NICInitialize() {
 	machine, err := vbox.GetMachine(instance.Name)
 
 	if err != nil {

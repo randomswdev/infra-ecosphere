@@ -10,6 +10,18 @@
   version = "v1.7.0"
 
 [[projects]]
+  digest = "1:755a657468d1c84411370c2220ff0fde986f7dfcad6d2b9fbadfce48483fa129"
+  name = "github.com/hashicorp/packer"
+  packages = [
+    "common/powershell",
+    "common/powershell/hyperv",
+    "packer/tmp",
+  ]
+  pruneopts = "UT"
+  revision = "542cb1d872b4fbba57f34ebb5913a266017a38df"
+  version = "v1.3.5"
+
+[[projects]]
   branch = "master"
   digest = "1:2df960a62aa15b929b5a8183196ca9a1802af6a5bac96cd09f0837c7fb06102f"
   name = "github.com/htruong/go-md2"
@@ -38,6 +50,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/gorilla/mux",
+    "github.com/hashicorp/packer/common/powershell/hyperv",
     "github.com/htruong/go-md2",
     "github.com/jmcvetta/napping",
     "github.com/rmxymh/go-virtualbox",
