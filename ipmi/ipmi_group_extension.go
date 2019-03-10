@@ -1,24 +1,25 @@
 package ipmi
 
 import (
-	"net"
-	"log"
 	"bytes"
-	"encoding/binary"
 	"crypto/md5"
-	"github.com/htruong/go-md2"
+	"encoding/binary"
+	"log"
+	"net"
 	"unsafe"
+
+	md2 "github.com/htruong/go-md2"
 )
 
 const (
-	GROUP_EXT_CMD_ATCA_GET_PICMG_PROP =	0x00
+	GROUP_EXT_CMD_ATCA_GET_PICMG_PROP = 0x00
 )
 
 type IPMI_GroupExt_Handler func(addr *net.UDPAddr, server *net.UDPConn, wrapper IPMISessionWrapper, message IPMIMessage)
 
 type IPMIGroupExtHandlerSet struct {
-	GetPICMGPropHandler	IPMI_GroupExt_Handler
-	UnsupportedHandler	IPMI_GroupExt_Handler
+	GetPICMGPropHandler IPMI_GroupExt_Handler
+	UnsupportedHandler  IPMI_GroupExt_Handler
 }
 
 var IPMIGroupExtHandler IPMIGroupExtHandlerSet = IPMIGroupExtHandlerSet{}
@@ -36,18 +37,36 @@ func init() {
 	IPMI_GROUPEXT_SetHandler(GROUP_EXT_CMD_ATCA_GET_PICMG_PROP, HandleIPMIGroupExtATCAGetPICMGPropHandler)
 }
 
-
 // Default Handler Implementation
 func HandleIPMIUnsupportedGroupExtCommand(addr *net.UDPAddr, server *net.UDPConn, wrapper IPMISessionWrapper, message IPMIMessage) {
 	log.Println("      IPMI GroupExt: This command is not supported currently, ignore.")
+
+	session, ok := GetSession(wrapper.SessionId)
+	if !ok {
+		log.Printf("Unable to find session 0x%08x\n", wrapper.SessionId)
+	} else {
+		session.Inc()
+
+		responseWrapper, responseMessage := BuildResponseMessageTemplate(wrapper, message, (IPMI_NETFN_GROUP_EXTENSION | IPMI_NETFN_RESPONSE), message.Command)
+		responseMessage.CompletionCode = 0xC1
+
+		responseWrapper.SessionId = wrapper.SessionId
+		responseWrapper.SequenceNumber = session.RemoteSessionSequenceNumber
+		rmcp := BuildUpRMCPForIPMI()
+
+		obuf := bytes.Buffer{}
+		SerializeRMCP(&obuf, rmcp)
+		SerializeIPMI(&obuf, responseWrapper, responseMessage, "")
+		server.WriteToUDP(obuf.Bytes(), addr)
+	}
 }
 
 type IPMIGroupExtGetPICMGPropertiesRequest struct {
-	Signature	uint8
+	Signature uint8
 }
 
 type PICMGData struct {
-	data		uint64
+	data uint64
 }
 
 func GetAuthenticationCodePICMG(authenticationType uint8, password string, sessionID uint32, message PICMGData, sessionSeq uint32) [16]byte {
@@ -85,7 +104,7 @@ func HandleIPMIGroupExtATCAGetPICMGPropHandler(addr *net.UDPAddr, server *net.UD
 	binary.Read(buf, binary.LittleEndian, &request)
 
 	session, ok := GetSession(wrapper.SessionId)
-	if ! ok {
+	if !ok {
 		log.Printf("Unable to find session 0x%08x\n", wrapper.SessionId)
 	} else {
 		bmcUser := session.User
@@ -117,7 +136,8 @@ func IPMI_GROUPEXT_DeserializeAndExecute(addr *net.UDPAddr, server *net.UDPConn,
 	switch message.Command {
 	case GROUP_EXT_CMD_ATCA_GET_PICMG_PROP:
 		log.Println("      IPMI CHASSIS: Command = GROUP_EXT_CMD_ATCA_GET_PICMG_PROP")
-		IPMIGroupExtHandler.GetPICMGPropHandler(addr, server, wrapper, message)
+		// IPMIGroupExtHandler.GetPICMGPropHandler(addr, server, wrapper, message)
+		IPMIGroupExtHandler.UnsupportedHandler(addr, server, wrapper, message)
 	default:
 		IPMIGroupExtHandler.UnsupportedHandler(addr, server, wrapper, message)
 	}
